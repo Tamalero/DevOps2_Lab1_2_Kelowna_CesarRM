@@ -5,7 +5,7 @@ pipeline{
     }
     tools {
         maven 'Maven 3.2.5'
-        jdk 'openjdk 21.0.3 2024-04-16 LTS'
+        //jdk 'openjdk 21.0.3 2024-04-16 LTS'
     }
 
  stages{
@@ -27,8 +27,9 @@ pipeline{
            
         } 
         stage('Staging Environment'){
-            steps{
+            steps {
              //sh 'firebase deploy -P devops-proj-staging --token "$FIREBASE_DEPLOY_TOKEN"'
+             echo 'Staging'
             }
         } 
         stage('Production Environment'){
