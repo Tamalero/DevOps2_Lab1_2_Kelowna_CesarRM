@@ -19,7 +19,7 @@ pipeline{
             steps{
             //sh 'firebase deploy -P devops2-lab12kelowna --token "$FIREBASE_DEPLOY_TOKEN"'
             sh 'mvn -f pom.xml clean install'
-            sh 'mvn exec:Tester1'
+            sh 'mvn -X exec:java -Dexec.mainClass=test1.Main'
                         
             input message: 'After testing. Do you want to continue with Staging Environment? (Click "Proceed" to continue)'
             

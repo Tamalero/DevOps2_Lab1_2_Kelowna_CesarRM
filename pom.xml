@@ -31,18 +31,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-             <executions>
-                <execution>
-                    <goals>
-                        <goal>Tester1</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <mainClass>test1.Main</mainClass>
-            </configuration>
-      
-    </build>
+ 
 
 </project>
