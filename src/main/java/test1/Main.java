@@ -4,17 +4,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.apache.log4j.*;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 
 public class Main {
     private WebDriver driver;
+    
 
     public static void main(String[] args) {
        // System.setProperty("webdriver.chrome.driver", "K:\\School\\SQA109 Software Test Automation 01\\Selenium Project\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"); //locate chromedriver executable and instances it, Windows Local
-         System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver"); //linux
-        var options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--ignore-ssl-errors=yes");
-        options.addArguments("--ignore-certificate-errors");
+        // System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver"); //linux
+        WebDriverManager.chromedriver().setup();
        
         WebDriver driver = new ChromeDriver(); // New chrome driver instance
             

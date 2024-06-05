@@ -10,8 +10,6 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-
-
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -22,7 +20,6 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.20.0</version>
-
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -30,7 +27,30 @@
             <version>7.10.2</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
- 
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.8.0</version>
+        </dependency>
 
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
+
