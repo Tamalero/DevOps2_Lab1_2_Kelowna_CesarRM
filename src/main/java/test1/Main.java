@@ -7,7 +7,7 @@ public class Main {
     private WebDriver driver;
     public static void main(String[] args) {
        // System.setProperty("webdriver.chrome.driver", "K:\\School\\SQA109 Software Test Automation 01\\Selenium Project\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"); //locate chromedriver executable and instances it, Windows Local
-         System.setProperty("webdriver.chrome.driver", " /usr/bin/chromedriver"); //linux
+         System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver"); //linux
        
         WebDriver driver = new ChromeDriver(); // New chrome driver instance
             
