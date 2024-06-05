@@ -18,9 +18,8 @@ pipeline{
         stage('Testing Environment'){
             steps{
             //sh 'firebase deploy -P devops2-lab12kelowna --token "$FIREBASE_DEPLOY_TOKEN"'
-            sh 'mvn -f src/main/kava/test1/pom.xml clean install'
-            
-            
+            sh 'mvn -f src/main/java/test1/pom.xml clean install'
+                        
             input message: 'After testing. Do you want to continue with Staging Environment? (Click "Proceed" to continue)'
             
             }
