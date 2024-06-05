@@ -38,7 +38,9 @@ public class Navigate {
 
        
     public void naVi(WebDriver driver)  {
-        final Logger logger = Logger.getLogger(this.getClass());
+                Logger logger = Logger.getLogger(this.getClass());
+                BasicConfigurator.configure();
+                
         this.driver = driver;
         WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5));
 
@@ -67,12 +69,12 @@ public class Navigate {
                  }
                  else {
                     System.out.println("Fatal error, program is not working");
-                    logger.error("Failure in Program");
+                    logger.info("Failure in Program");
                     driver.quit();       
                  } 
                 }      
                  catch (Exception e) {
-                    System.out.println("Alert not found or error in Alert");
+                    System.out.println("Alert not found. program working or error in Alert");
                  }
         }
         catch (Exception e){
