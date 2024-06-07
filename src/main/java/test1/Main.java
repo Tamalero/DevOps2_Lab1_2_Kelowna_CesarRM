@@ -2,8 +2,7 @@ package test1;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.apache.log4j.*;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 
