@@ -6,7 +6,7 @@ pipeline {
     }
     
     tools {
-        maven 'Maven 3.9.7'
+        //maven 'Maven 3.9.7'
         // jdk 'openjdk 21.0.3 2024-04-16 LTS'
     }
 
