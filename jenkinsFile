@@ -5,10 +5,10 @@ pipeline {
         FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
     }
     
-    tools {
-        //maven 'Maven 3.9.7'
+   /* tools {
+        // maven 'Maven 3.9.7'
         // jdk 'openjdk 21.0.3 2024-04-16 LTS'
-    }
+    } */
 
     stages {
         stage('Building') {
