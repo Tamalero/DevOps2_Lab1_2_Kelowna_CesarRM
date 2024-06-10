@@ -1,10 +1,7 @@
 package test1;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,6 +10,7 @@ import java.time.Duration;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Alert; // Import the File class
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement; // Import the IOException class to handle errors
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +33,7 @@ public class Navigate {
     private WebElement delMember;
     @FindBy(xpath = "/html/body/div[1]/table/tbody/tr/td[1]/form/table/tbody/tr/td[2]/table/tbody/tr/td[1]/select/option\r\n")
     private WebElement selectableElement;
+    public Boolean isCorrect = false;
 
     public Navigate(WebDriver driver) {
         this.driver = driver;
@@ -47,11 +46,13 @@ public class Navigate {
 
         this.driver = driver;
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        String filePathString = "output.txt";
+        String filePathString = "/tmp/SUCCESS.txt";
+        String filePathString2 = "tmp/FAILURE.txt";
         Path path = Paths.get(filePathString);
-
+        Path path2 = Paths.get(filePathString2);
+        
         try {
-            driver.get(Locators.webSite);
+            driver.get(Locators.webSite2);
             // wait.until(ExpectedConditions.visibilityOf(userNameField));
             Thread.sleep(4000);
             lastName.sendKeys("Cesar");
@@ -61,65 +62,122 @@ public class Navigate {
             Thread.sleep(1000);
             selectableElement.click();
             delMember.click();
-            boolean isCorrect;
-            try {
-                Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-                String alertText = alert.getText();
-                isCorrect = alertText.contains("Error");
-                Thread.sleep(4000);
-                try { 
-                    alert.accept();
-                }
-                catch ( Exception e) {
-                    
-                }
-                Thread.sleep(1000);
-                if ( selectableElement.getText().isEmpty() ) {
-                    isCorrect = true;
+            System.out.println("First Phase completed.");
 
-                }
-                if (Files.exists(path)) {
-                    Files.delete(path);
-
-                    if (isCorrect = false) {
-                        System.out.println("Function works");
-                        logger.info("Program works");
-                        try {
-
-                            File myObj = new File(path.toString());
-                            FileWriter fw = new FileWriter(path.toString(), true);
-                            BufferedWriter bw = new BufferedWriter(fw);
-                            PrintWriter out = new PrintWriter(bw);
-                            out.println("SUCCESS");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                        }
-                    } else {
-                        System.out.println("Fatal error, program is not working");
-                        logger.info("Failure in Program");
-                        try {
-
-                            File myObj = new File(path.toString());
-                            FileWriter fw = new FileWriter(path.toString(), true);
-                            BufferedWriter bw = new BufferedWriter(fw);
-                            PrintWriter out = new PrintWriter(bw);
-                            out.println("ERROR");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                        }
-                        driver.quit();
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println("Alert not found. program working or error in Alert");
-            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
+            System.out.println("Error in First Phase.");
+            driver.quit();
+            System.exit(0);
+        }
+        try {
+            System.out.println("Second Phase, Part 1 starts here");
+            Alert alert = wait.until(ExpectedConditions.alertIsPresent()); // Alert check
+            wait.ignoring(NoAlertPresentException.class);
+            String alertText = alert.getText();
+            if (alertText.contains("Error")) {
+                isCorrect = false;
+            }
+            Thread.sleep(1000);
+            try {
+                alert.accept();
+            } catch (Throwable t) {
+                // t.printStackTrace();
+                System.out.println("Error in Second Phase, Part 1.");
+
+            }
+        } catch (Throwable t) {
+            // t.printStackTrace();
+            System.out.println("Alert not found. program working or error in Alert");
+            isCorrect = true;
+        }
+        try {
+            Thread.sleep(1000);
+            System.out.println("Second Phase, Part 2 starts here. Current info is: " + isCorrect);
+
+            if ( selectableElement.isSelected()) { // selectable area check
+                isCorrect = false;
+
+                System.out.println("Second Phase completed: isCorrect is: " + isCorrect);
+
+            } else {
+                isCorrect = true;
+                System.out.println("Second Phase completed: isCorrect is: " + isCorrect);
+
+            }
+        }
+
+        catch (Exception e) {
+            System.out.println("Error in Second Phase, Part 2, error in element section.");
+        }
+        try {
+
+            if (Files.exists(path)) { // temp file existance check
+                System.out.println("File Creation Phase, File " + path.toString() + " is: " + Files.exists(path));
+                Files.delete(path);
+            }
+            if (Files.exists(path2)) { // temp file existance check
+                System.out.println("File Creation Phase, File " + path.toString() + " is: " + Files.exists(path2));
+                Files.delete(path2);
+            }
+
+            if (isCorrect) {
+                // System.out.println("Function works");
+                // logger.info("Program works");
+                try {
+
+                    FileWriter writer = new FileWriter(path.toString());
+                    // Write "SUCCESS" to the file
+                    writer.write("SUCCESS");
+
+                    // Close the PrintWriter (this will also close the underlying BufferedWriter and
+                    // FileWriter)
+                    writer.close();
+
+                    System.out.println("Data written to file successfully.");
+                    System.out.println("Third  Phase completed: isCorrect is: " + isCorrect);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Error writing file.");
+
+                }
+            } else {
+                // System.out.println("Fatal error, program is not working");
+                // logger.info("Failure in Program");
+                try {
+
+                    FileWriter writer = new FileWriter(path2.toString());
+                    // Write "SUCCESS" to the file
+                    writer.write("FAILURE");
+
+                    // Close the PrintWriter (this will also close the underlying BufferedWriter and
+                    // FileWriter)
+                    writer.close();
+
+                    System.out.println("Data written to file successfully.");
+                    System.out.println("Third  Phase completed: isCorrect is: " + isCorrect);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Error writing file.");
+
+                }
+                // driver.quit();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            if (isCorrect) {
+                logger.info("SUCCESS");
+            } else {
+                logger.info("FAILURE");
+            }
+
             driver.quit();
         }
 

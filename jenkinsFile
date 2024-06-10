@@ -1,43 +1,65 @@
-pipeline{
+pipeline {
     agent any
+    
     environment {
-    FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
+        FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
     }
+    
     tools {
-        maven 'Maven 3.2.5'
-        //jdk 'openjdk 21.0.3 2024-04-16 LTS'
+        maven 'Maven 3.9.7'
+        // jdk 'openjdk 21.0.3 2024-04-16 LTS'
     }
 
- stages{
-        stage('Building'){
-            steps{
-           //sh 'npm install -g firebase-tools'
-                echo 'Building...'
-            }
-        } 
-        stage('Testing Environment'){
-            steps{
-            //sh 'firebase deploy -P devops2-lab12kelowna --token "$FIREBASE_DEPLOY_TOKEN"'
-            sh 'mvn -f pom.xml clean install'
-            sh 'mvn exec:java -Dexec.mainClass=test1.Main'
-                        
-            input message: 'After testing. Do you want to continue with Staging Environment? (Click "Proceed" to continue)'
-            
-            }
-           
-        } 
-        stage('Staging Environment'){
+    stages {
+        stage('Building') {
             steps {
-             //sh 'firebase deploy -P devops-proj-staging --token "$FIREBASE_DEPLOY_TOKEN"'
-             echo 'Staging'
+                echo 'Building...'
+                // Add your build steps here
             }
         } 
-        stage('Production Environment'){
-            steps{
-            echo 'deploying'
-            sh 'firebase deploy -P devops2-lab12kelownaproduction --token "$FIREBASE_DEPLOY_TOKEN"'
-            }
+
+        stage('Testing Environment') {
+            steps {
+                script {
+                    def exists1 = fileExists '/tmp/SUCCESS.txt'
+                    def exists2 = fileExists '/tmp/FAILURE.txt'
+
+                    sh 'firebase deploy -P devops2-lab12kelowna --token "$FIREBASE_DEPLOY_TOKEN"'
+                    sh 'mvn -f pom.xml clean install'
+                    sh 'mvn exec:java -Dexec.mainClass=test1.Main > /tmp/output.txt'
+
+                    if (exists2) {
+                        error "Test was deemed a FAILURE. File FAILURE.txt is present."
+                    }
+                }
+            } 
+        } 
+
+        stage('Staging Environment') {
+            steps {
+                script {
+                    def exists1 = fileExists '/tmp/SUCCESS.txt'
+                    
+                    if (exists1) {
+                        sh 'firebase deploy -P devops-proj-staging --token "$FIREBASE_DEPLOY_TOKEN"'
+                        echo 'Staging'
+                    }
+                }
+            } 
+        } 
+
+        stage('Production Environment') {
+            steps {
+                script {
+                    def exists1 = fileExists '/tmp/SUCCESS.txt'
+                    
+                    if (exists1) {
+                        echo 'Deploying to Production'
+                        sh 'firebase deploy -P devops2-lab12kelownaproduction --token "$FIREBASE_DEPLOY_TOKEN"'
+                    }
+                }
+            } 
         } 
     }
-
 }
+
