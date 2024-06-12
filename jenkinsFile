@@ -5,10 +5,10 @@ pipeline {
         FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
     }
     
-   /* tools {
-        // maven 'Maven 3.9.7'
+   tools {
+       maven 'Maven 3.9.7'
         // jdk 'openjdk 21.0.3 2024-04-16 LTS'
-    } */
+    } 
 
     stages {
         stage('Building') {
@@ -26,7 +26,7 @@ pipeline {
 
                     sh 'firebase deploy -P devops2-lab12kelowna --token "$FIREBASE_DEPLOY_TOKEN"'
                     sh 'mvn -f pom.xml clean install'
-                    sh 'mvn exec:java -Dexec.mainClass=test1.Main > /tmp/output.txt'
+                    sh 'mvn exec:java -Dexec.mainClass=test1.Main'
 
                     if (exists2) {
                         error "Test was deemed a FAILURE. File FAILURE.txt is present."
@@ -62,4 +62,3 @@ pipeline {
         } 
     }
 }
-
