@@ -21,7 +21,7 @@ public class Main {
         options.addArguments("--headless");
         
        
-        WebDriver driver = new ChromeDriver(); // New chrome driver instance
+        WebDriver driver = new ChromeDriver(options); // New chrome driver instance
             
             Navigate naviGate = new Navigate(driver);  
            
