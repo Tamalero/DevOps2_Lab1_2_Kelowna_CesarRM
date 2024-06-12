@@ -41,7 +41,7 @@ pipeline {
                     def exists1 = fileExists '/tmp/SUCCESS.txt'
                     
                     if (exists1) {
-                        sh 'firebase deploy -P devops-proj-staging --token "$FIREBASE_DEPLOY_TOKEN"'
+                        sh 'firebase deploy -P devops2-lab12kelownastag --token "$FIREBASE_DEPLOY_TOKEN"'
                         echo 'Staging'
                     }
                 }
